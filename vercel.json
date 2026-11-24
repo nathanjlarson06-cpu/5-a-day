@@ -1,0 +1,6 @@
+{
+  "headers": [
+    { "source": "/(index.html|)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/(config.js|backend.js)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+  ]
+}
