@@ -33,9 +33,14 @@ alter table public.docs     enable row level security;
 alter table public.profiles enable row level security;
 alter table public.admins   enable row level security;
 
-create or replace function public.is_admin()
+-- Admin check lives in a private schema so it isn't callable through the public API.
+create schema if not exists private;
+grant usage on schema private to anon, authenticated;
+create or replace function private.is_admin()
 returns boolean language sql stable security definer set search_path = public
 as $$ select exists (select 1 from public.admins where user_id = auth.uid()) $$;
+revoke all on function private.is_admin() from public;
+grant execute on function private.is_admin() to anon, authenticated;
 
 -- Who can read and write what.
 drop policy if exists "docs read"   on public.docs;
@@ -44,21 +49,21 @@ drop policy if exists "docs update" on public.docs;
 
 create policy "docs read" on public.docs for select using (
   collection in ('players','community','mod','leagues')
-  or (collection = 'subs' and (id = auth.uid()::text or public.is_admin()))
+  or (collection = 'subs' and (id = auth.uid()::text or private.is_admin()))
 );
 create policy "docs insert" on public.docs for insert to authenticated with check (
   (collection = 'players' and id = auth.uid()::text)
-  or (collection = 'subs' and (id = auth.uid()::text or public.is_admin()))
-  or (collection in ('community','mod','leagues') and public.is_admin())
+  or (collection = 'subs' and (id = auth.uid()::text or private.is_admin()))
+  or (collection in ('community','mod','leagues') and private.is_admin())
 );
 create policy "docs update" on public.docs for update to authenticated using (
   (collection = 'players' and id = auth.uid()::text)
-  or (collection = 'subs' and (id = auth.uid()::text or public.is_admin()))
-  or (collection in ('community','mod','leagues') and public.is_admin())
+  or (collection = 'subs' and (id = auth.uid()::text or private.is_admin()))
+  or (collection in ('community','mod','leagues') and private.is_admin())
 ) with check (
   (collection = 'players' and id = auth.uid()::text)
-  or (collection = 'subs' and (id = auth.uid()::text or public.is_admin()))
-  or (collection in ('community','mod','leagues') and public.is_admin())
+  or (collection = 'subs' and (id = auth.uid()::text or private.is_admin()))
+  or (collection in ('community','mod','leagues') and private.is_admin())
 );
 
 drop policy if exists "profiles read"   on public.profiles;
@@ -74,7 +79,6 @@ create policy "admins read own" on public.admins for select to authenticated usi
 grant select on public.docs, public.profiles to anon, authenticated;
 grant insert, update on public.docs, public.profiles to authenticated;
 grant select on public.admins to authenticated;
-grant execute on function public.is_admin() to anon, authenticated;
 
 -- Live updates for leaderboards and leagues.
 do $$ begin
