@@ -2,7 +2,7 @@
 // The anon / publishable key is meant to be public. Your data is protected by the rules in supabase/schema.sql.
 // Never put the "service_role" / secret key here.
 window.FIVE_CONFIG = {
-  supabaseUrl: "YOUR_SUPABASE_URL",          // looks like https://abcdefghijkl.supabase.co
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY", // a long string starting with eyJ... or sb_publishable_...
+  supabaseUrl: "https://iwfwyuofvkqgweunnrvc.supabase.co",
+  supabaseAnonKey: "sb_publishable_6SKUcnz15yE8URAhJSaGIw_IwQ6h49H",
   googleSignIn: false                        // set to true after turning on Google under Authentication -> Providers
 };
