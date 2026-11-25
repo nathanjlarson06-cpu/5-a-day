@@ -403,6 +403,9 @@ table.ps tr.worst td:first-child::after{content:" · weakest";color:var(--bad);f
 .qin .opt:nth-child(3){animation-delay:180ms}
 .qin .opt:nth-child(4){animation-delay:225ms}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+.legal{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:28px 0 12px}
+.legal a{color:inherit}
+.legal a:hover{color:var(--ink)}
 </style>
 
 <div class="wrap">
@@ -615,6 +618,8 @@ table.ps tr.worst td:first-child::after{content:" · weakest";color:var(--bad);f
       <div class="badges" id="badges"></div>
     </div>
   </section>
+
+  <footer class="legal small muted"><a href="/terms.html">Terms of Service</a><span aria-hidden="true">·</span><a href="/privacy.html">Privacy Policy</a></footer>
 </div>
 
 <div class="overlay" id="help" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle">
@@ -644,6 +649,7 @@ table.ps tr.worst td:first-child::after{content:" · weakest";color:var(--bad);f
         <div class="row"><button class="btn btn-gold" type="submit" id="authSend">Email me a link</button><button class="btn btn-ghost" type="button" id="authGoogle" hidden>Continue with Google</button></div>
       </form>
       <div class="msg" id="authMsg" aria-live="polite"></div>
+      <p class="small muted" style="margin:0">By signing in, you agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a> and <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       <div><button class="linkbtn" type="button" data-close>Not now</button></div>
     </div>
     <div id="authName" class="stack" style="gap:12px" hidden>
